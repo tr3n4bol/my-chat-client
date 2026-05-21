@@ -9,6 +9,7 @@
         "@testing-library/react": "^16.3.2",
         "@testing-library/user-event": "^13.5.0",
         "axios": "^1.16.1",
+        "http-proxy-middleware": "^4.0.0",
         "react": "^19.2.6",
         "react-dom": "^19.2.6",
         "react-hot-toast": "^2.6.0",
@@ -42,5 +43,5 @@
             "last 1 safari version"
         ]
     },
-    "proxy": "https://localhost:5000/"
+    "proxy": "http://localhost:5000"
 }
