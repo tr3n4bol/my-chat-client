@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { fetchLoggedUser, fetchAllUsers } from "../api/users";
-import { useDispatch, useSelector } from "react-redux";
+import { getAllChats } from "../api/chat";
+import { useDispatch } from "react-redux";
 import { showLoader, hideLoader } from "../redux/loaderSlice";
-import { setAllUsers, setUser } from "../redux/userSlice";
+import { setAllUsers, setUser, setAllChats } from "../redux/userSlice";
 
 function ProtectedRoute({ children }) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { user } = useSelector((state) => state.userReducer);
 
     const getLoggedInUser = async () => {
         dispatch(showLoader());
@@ -42,10 +42,21 @@ function ProtectedRoute({ children }) {
         }
     };
 
+    const getCurrentChats = async () => {
+        try {
+            const response = await getAllChats();
+            dispatch(setAllChats(response.data));
+        } catch (error) {
+            toast.error(error.message);
+            navigate("/login");
+        }
+    };
+
     useEffect(() => {
         if (localStorage.getItem("token")) {
             getLoggedInUser();
             getAllUsers();
+            getCurrentChats();
         } else {
             navigate("/login");
         }
