@@ -3,12 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { createNewChat } from "../../../api/chat";
 import { showLoader, hideLoader } from "../../../redux/loaderSlice";
 import { setAllChats, setSelectedChat } from "../../../redux/userSlice";
+import moment from "moment";
 
 function UsersList({ searchKey }) {
     const {
         user: currUser,
         allUsers,
         allChats,
+        selectedChat,
     } = useSelector((state) => state.userReducer);
 
     const dispatch = useDispatch();
@@ -34,13 +36,38 @@ function UsersList({ searchKey }) {
     const openChat = (selectedUserId) => {
         const chat = allChats.find(
             (chat) =>
-                chat.members.includes(currUser._id) &&
-                chat.members.includes(selectedUserId),
+                chat.members.map((m) => m._id).includes(currUser._id) &&
+                chat.members.map((m) => m._id).includes(selectedUserId),
         );
 
         if (chat) {
             dispatch(setSelectedChat(chat));
         }
+    };
+
+    const getLastMessageTimestamp = (userId) => {
+        const chat = allChats.find((chat) =>
+            chat.members.map((m) => m._id).includes(userId),
+        );
+        if (!chat && chat.lastMessage) {
+            return "";
+        } else {
+            return moment(chat.lastMessage?.createdAt).format("hh:mm");
+        }
+    };
+
+    const getLastMessage = (userId) => {
+        const chat = allChats.find((chat) =>
+            chat.members.map((m) => m._id).includes(userId),
+        );
+
+        return chat?.lastMessage?.text?.substring(0, 25) || "";
+    };
+
+    const isSelectedChat = (user) => {
+        if (selectedChat)
+            return selectedChat.members.map((m) => m._id).includes(user._id);
+        return false;
     };
 
     return allUsers
@@ -53,7 +80,9 @@ function UsersList({ searchKey }) {
                         .toLowerCase()
                         .includes(searchKey.toLowerCase())) &&
                     searchKey) ||
-                allChats.some((chat) => chat.members.includes(user._id))
+                allChats.some((chat) =>
+                    chat.members.map((m) => m._id).includes(user._id),
+                )
             );
         })
         .map((user) => {
@@ -63,7 +92,13 @@ function UsersList({ searchKey }) {
                     onClick={() => openChat(user._id)}
                     key={user._id}
                 >
-                    <div className="filtered-user">
+                    <div
+                        className={
+                            isSelectedChat(user)
+                                ? "selected-user"
+                                : "filtered-user"
+                        }
+                    >
                         <div className="filter-user-display">
                             {user.profilePic ? (
                                 <img
@@ -72,7 +107,13 @@ function UsersList({ searchKey }) {
                                     className="user-profile-image"
                                 ></img>
                             ) : (
-                                <div className="user-default-avatar">
+                                <div
+                                    className={
+                                        isSelectedChat(user)
+                                            ? "user-selected-avatar"
+                                            : "user-default-avatar"
+                                    }
+                                >
                                     {user.firstName.charAt(0) +
                                         user.lastName.charAt(0) || ""}
                                 </div>
@@ -82,11 +123,14 @@ function UsersList({ searchKey }) {
                                 <div className="user-display-name">
                                     {user.firstName + " " + user.lastName}
                                 </div>
-                                <div className="user-display-email">
-                                    {user.email}
+                                <div>
+                                    {getLastMessage(user._id)}
                                 </div>
+                                <div className="last-message-timestamp message-timestamp">{getLastMessageTimestamp(user._id)}</div>
                                 {!allChats.find((chat) =>
-                                    chat.members.includes(user._id),
+                                    chat.members
+                                        .map((m) => m._id)
+                                        .includes(user._id),
                                 ) && (
                                     <div className="user-start-chat">
                                         <button

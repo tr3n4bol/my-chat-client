@@ -5,12 +5,14 @@ import Sidebar from "./components/Sidebar";
 import ChatArea from "./components/ChatArea";
 
 function Home() {
+    const { selectedChat } = useSelector((state) => state.userReducer);
+
     return (
         <div className="home-page">
             <Header />
             <div className="main-content">
                 <Sidebar />
-                <ChatArea />
+                {selectedChat && <ChatArea />}
             </div>
         </div>
     );
