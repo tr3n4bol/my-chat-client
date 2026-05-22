@@ -3,8 +3,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signUpUser } from "../../api/auth";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { hideLoader, showLoader } from "../../redux/loaderSlice";
 
 function SignUp() {
+    const dispatch = useDispatch();
     const [user, setUser] = useState({
         firstName: "",
         lastName: "",
@@ -16,9 +19,10 @@ function SignUp() {
 
     async function onFormSubmit(event) {
         event.preventDefault();
-
+        dispatch(showLoader);
         try {
             const response = await signUpUser(user);
+            dispatch(hideLoader);
             toast.success(response.message);
 
             navigate("/login", {
@@ -27,6 +31,7 @@ function SignUp() {
                 },
             });
         } catch (error) {
+            dispatch(hideLoader);
             toast.error(error.response?.data?.message || error.message);
         }
     }
