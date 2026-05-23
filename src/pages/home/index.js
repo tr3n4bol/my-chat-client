@@ -9,18 +9,26 @@ const socket = io("http://localhost:5000");
 
 function Home() {
     const { selectedChat, user } = useSelector((state) => state.userReducer);
+    const [onlineUsers, setOnlineUsers] = useState([]);
 
     useEffect(() => {
         if (user) {
             socket.emit("join-room", user._id);
+            socket.emit("user-login", user._id);
+            socket.on("online-users", (onlineUsers) => {
+                setOnlineUsers(onlineUsers);
+            });
+            socket.on("online-users-updated", (onlineUsers) => {
+                setOnlineUsers(onlineUsers);
+            });
         }
-    }, [user]);
+    }, [user, onlineUsers]);
 
     return (
         <div className="home-page">
-            <Header />
+            <Header socket={socket} />
             <div className="main-content">
-                <Sidebar socket={socket} />
+                <Sidebar socket={socket} onlineUsers={onlineUsers} />
                 {selectedChat && <ChatArea socket={socket} />}
             </div>
         </div>

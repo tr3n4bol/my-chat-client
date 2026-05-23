@@ -1,13 +1,22 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { hideLoader, showLoader } from "../../../redux/loaderSlice";
 
-function Header() {
+function Header({ socket }) {
     const { user } = useSelector((state) => state.userReducer);
+    const navigate = useNavigate();
 
     const getFullName = () => {
         const firstName = user?.firstName || "";
         const lastName = user?.lastName || "";
 
         return lastName ? `${firstName} ${lastName}` : firstName;
+    };
+
+    const logout = () => {
+        localStorage.removeItem("token");
+        navigate("/login");
+        socket.emit("user-logout", user._id);
     };
 
     return (
@@ -17,9 +26,24 @@ function Header() {
                     My-chat
                 </i>
             </div>
+            {/* TODO refactor */}
             <div className="app-user-profile">
+                {user?.profilePicture ? (
+                    <img
+                        className="logged-user-profile-pic"
+                        src={user.profilePicture}
+                        onClick={() => navigate("/profile")}
+                    />
+                ) : (
+                    <div
+                        className="logged-user-profile-pic"
+                        onClick={() => navigate("/profile")}
+                    ></div>
+                )}
                 <div className="logged-user-name">{getFullName()}</div>
-                <div className="logged-user-profile-pic"></div>
+                <button className="logout-button">
+                    <i className="fa fa-power-off" onClick={logout}></i>
+                </button>
             </div>
         </div>
     );

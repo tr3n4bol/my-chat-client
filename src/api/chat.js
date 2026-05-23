@@ -1,4 +1,4 @@
-import { axiosInstance } from "./index";
+import { axiosInstance, url } from "./index";
 
 export const getAllChats = async (user) => {
     const response = await axiosInstance.get("/api/chat/get-all-chats", user);

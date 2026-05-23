@@ -681,6 +681,70 @@ i {
   transform: translateY(-50%) scale(1.04);
 }
 
+/*  */
+.select-profile-pic-container {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    padding: 26px 0;
+}
+
+.select-profile-pic-container input[type="file"] {
+    max-width: 260px;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.select-profile-pic-container input[type="file"]::file-selector-button {
+    height: 42px;
+    margin-right: 14px;
+    padding: 0 18px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: #ffffff;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(99, 102, 241, 0.24);
+    transition:
+        transform 180ms ease,
+        box-shadow 180ms ease,
+        opacity 180ms ease;
+}
+
+.select-profile-pic-container input[type="file"]::file-selector-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 24px rgba(99, 102, 241, 0.32);
+}
+
+.profile-pic-save-btn {
+    height: 42px;
+    padding: 0 20px;
+    border: none;
+    border-radius: 12px;
+    background: #0f172a;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.18);
+    transition:
+        transform 180ms ease,
+        box-shadow 180ms ease,
+        opacity 180ms ease;
+}
+
+.profile-pic-save-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.24);
+}
+
+.profile-pic-save-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+}
+/*  */
 .send-emoji-btn:hover,
 .send-image-btn:hover {
   background: var(--primary-soft);

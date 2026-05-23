@@ -214,6 +214,7 @@ function ChatArea({ socket }) {
                         </div>
                     </div>
                     <div className="send-message-div">
+                        {/* TODO черновик при переходе между чатами */}
                         <input
                             type="text"
                             className="send-message-input"

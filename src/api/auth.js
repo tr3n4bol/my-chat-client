@@ -1,4 +1,4 @@
-import { axiosInstance } from "./index";
+import { axiosInstance, url } from "./index";
 
 export const signUpUser = async (user) => {
     const response = await axiosInstance.post("/api/auth/signup", user);

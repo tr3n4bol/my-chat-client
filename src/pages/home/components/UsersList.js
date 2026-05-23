@@ -7,7 +7,7 @@ import moment from "moment";
 import { useEffect } from "react";
 import store from "../../../redux/store";
 
-function UsersList({ searchKey, socket }) {
+function UsersList({ searchKey, socket, onlineUsers }) {
     const {
         user: currUser,
         allUsers,
@@ -162,8 +162,10 @@ function UsersList({ searchKey, socket }) {
     return getData().map((obj) => {
         let user = obj;
         if (obj.members) {
-            user = obj.members.find((m) => m._id != currUser._id);
+            user = obj.members.find((m) => m._id !== currUser._id);
         }
+        // TODO
+        // странное поведение, select не должен срабатывать несколько раз подряд
         return (
             <div
                 className="user-search-filter"
@@ -176,9 +178,9 @@ function UsersList({ searchKey, socket }) {
                     }
                 >
                     <div className="filter-user-display">
-                        {user.profilePic ? (
+                        {user.profilePicture ? (
                             <img
-                                src={user.profilePic}
+                                src={user.profilePicture}
                                 alt="Profile"
                                 className="user-profile-image"
                             ></img>
@@ -188,6 +190,11 @@ function UsersList({ searchKey, socket }) {
                                     isSelectedChat(user)
                                         ? "user-selected-avatar"
                                         : "user-default-avatar"
+                                }
+                                style={
+                                    onlineUsers.includes(user._id)
+                                        ? { border: "#31e152 3px solid" }
+                                        : null
                                 }
                             >
                                 {user.firstName.charAt(0) +
