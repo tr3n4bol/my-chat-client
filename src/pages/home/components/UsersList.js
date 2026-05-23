@@ -4,8 +4,10 @@ import { createNewChat } from "../../../api/chat";
 import { showLoader, hideLoader } from "../../../redux/loaderSlice";
 import { setAllChats, setSelectedChat } from "../../../redux/userSlice";
 import moment from "moment";
+import { useEffect } from "react";
+import store from "../../../redux/store";
 
-function UsersList({ searchKey }) {
+function UsersList({ searchKey, socket }) {
     const {
         user: currUser,
         allUsers,
@@ -64,9 +66,54 @@ function UsersList({ searchKey }) {
         return chat?.lastMessage?.text?.substring(0, 25) || "";
     };
 
+    useEffect(() => {
+        if (!socket) return;
+
+        const handleReceiveMessage = (message) => {
+            const selectedChat = store.getState().userReducer.selectedChat;
+            let allChats = store.getState().userReducer.allChats;
+
+            allChats = allChats.map((chat) => {
+                if (chat._id === message.chatId) {
+                    return {
+                        ...chat,
+                        unreadMessageCount:
+                            selectedChat?._id === message.chatId
+                                ? 0
+                                : (chat?.unreadMessageCount || 0) + 1,
+                        lastMessage: message,
+                    };
+                }
+
+                return chat;
+            });
+
+            const latestChat = allChats.find(
+                (chat) => chat._id === message.chatId,
+            );
+
+            const otherChats = allChats.filter(
+                (chat) => chat._id !== message.chatId,
+            );
+
+            if (latestChat) {
+                dispatch(setAllChats([latestChat, ...otherChats]));
+            } else {
+                dispatch(setAllChats(allChats));
+            }
+        };
+
+        socket.off("set-message-count", handleReceiveMessage);
+        socket.on("set-message-count", handleReceiveMessage);
+
+        return () => {
+            socket.off("set-message-count", handleReceiveMessage);
+        };
+    }, [socket, dispatch]);
+
     const getUnreadMessageCount = (userId) => {
-        const chat = allChats.find(
-            (c) => c.members.map((m) => m._id).includes(userId), // ',' ?
+        const chat = allChats.find((chat) =>
+            chat.members.map((m) => m._id).includes(userId),
         );
 
         if (
@@ -76,7 +123,8 @@ function UsersList({ searchKey }) {
         ) {
             return (
                 <div className="unread-message-counter">
-                    {chat.unreadMessageCount}
+                    {" "}
+                    {chat.unreadMessageCount}{" "}
                 </div>
             );
         } else {
@@ -94,7 +142,7 @@ function UsersList({ searchKey }) {
         if (searchKey === "") {
             return allChats;
         } else {
-            allUsers.filter((user) => {
+            return allUsers.filter((user) => {
                 return (
                     ((user.firstName
                         .toLowerCase()

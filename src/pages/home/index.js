@@ -5,16 +5,23 @@ import Sidebar from "./components/Sidebar";
 import ChatArea from "./components/ChatArea";
 import io from "socket.io-client";
 
+const socket = io("http://localhost:5000");
+
 function Home() {
-    const { selectedChat } = useSelector((state) => state.userReducer);
-    const socket = io("http://localhost:5000");
+    const { selectedChat, user } = useSelector((state) => state.userReducer);
+
+    useEffect(() => {
+        if (user) {
+            socket.emit("join-room", user._id);
+        }
+    }, [user]);
 
     return (
         <div className="home-page">
             <Header />
             <div className="main-content">
-                <Sidebar />
-                {selectedChat && <ChatArea />}
+                <Sidebar socket={socket} />
+                {selectedChat && <ChatArea socket={socket} />}
             </div>
         </div>
     );
