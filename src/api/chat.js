@@ -11,3 +11,11 @@ export const createNewChat = async (members) => {
     });
     return response.data;
 };
+
+export const clearUnreadMessageCount = async (chatId) => {
+    const response = await axiosInstance.post(
+        "/api/chat/clean-unread-messages",
+        { chatId: chatId },
+    );
+    return response.data;
+};

@@ -1,13 +1,16 @@
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { createNewMessage, fetchAllMessages } from "../../../api/message";
+import { clearUnreadMessageCount } from "../../../api/chat";
 import { hideLoader, showLoader } from "../../../redux/loaderSlice";
 import { useEffect, useState } from "react";
 import moment from "moment/moment";
 import "moment/locale/ru";
 
 function ChatArea() {
-    const { selectedChat, user } = useSelector((state) => state.userReducer);
+    const { selectedChat, user, allChats } = useSelector(
+        (state) => state.userReducer,
+    );
     const selectedUser = selectedChat.members.find((u) => u._id !== user._id);
     const dispatch = useDispatch();
     const [message, setMessage] = useState("");
@@ -40,6 +43,22 @@ function ChatArea() {
         dispatch(hideLoader());
     };
 
+    const clearUnreadMessages = async () => {
+        dispatch(showLoader());
+        try {
+            const response = await clearUnreadMessageCount(selectedChat._id);
+            allChats.map((c) => {
+                if (c._id === selectedChat._id) {
+                    return response.data;
+                }
+                return c;
+            });
+        } catch (error) {
+            toast.error(error.message);
+        }
+        dispatch(hideLoader());
+    };
+
     const formatTime = (timestamp) => {
         moment.locale("ru");
         const now = moment();
@@ -57,6 +76,9 @@ function ChatArea() {
 
     useEffect(() => {
         getMessages();
+        if (selectedChat?.lastMessage?.sender !== user._id) {
+            clearUnreadMessages();
+        }
     }, [selectedChat]);
 
     return (
@@ -96,7 +118,14 @@ function ChatArea() {
                                                     : { float: "left" }
                                             }
                                         >
-                                            {formatTime(m.createdAt)}
+                                            {formatTime(m.createdAt)}{" "}
+                                            {isSender && m.read && (
+                                                <i
+                                                    className="fa fa-check-circle"
+                                                    aria-hidden="true"
+                                                    style={{ color: "#f73210" }}
+                                                ></i>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
