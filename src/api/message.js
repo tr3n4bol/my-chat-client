@@ -1,8 +1,8 @@
-import { axiosInstance } from ".";
+import { axiosInstance, url } from ".";
 
 export const createNewMessage = async (message) => {
     const response = await axiosInstance.post(
-        "/api/message/new-message",
+        url + "/api/message/new-message",
         message,
     );
     return response.data;
@@ -10,7 +10,7 @@ export const createNewMessage = async (message) => {
 
 export const fetchAllMessages = async (chatId) => {
     const response = await axiosInstance.get(
-        `/api/message/get-all-messages/${chatId}`,
+        `${url}/api/message/get-all-messages/${chatId}`,
     );
     return response.data;
 };
