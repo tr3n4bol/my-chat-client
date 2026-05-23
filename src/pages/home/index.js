@@ -7,7 +7,7 @@ import io from "socket.io-client";
 
 function Home() {
     const { selectedChat } = useSelector((state) => state.userReducer);
-    const socket = io("http:localhost:5000");
+    const socket = io("http://localhost:5000");
 
     return (
         <div className="home-page">
