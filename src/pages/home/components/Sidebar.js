@@ -6,11 +6,11 @@ function Sidebar({ socket, onlineUsers }) {
     const [searchKey, setSearchKey] = useState("");
 
     return (
-        <div className="app-sidebar">
+        <div className="sidebar">
             <Search searchKey={searchKey} setSearchKey={setSearchKey} />
             <UsersList
-                searchKey={searchKey}
                 socket={socket}
+                searchKey={searchKey}
                 onlineUsers={onlineUsers}
             />
         </div>

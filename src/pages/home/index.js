@@ -25,11 +25,29 @@ function Home() {
     }, [user, onlineUsers]);
 
     return (
-        <div className="home-page">
+        <div className="app-page">
             <Header socket={socket} />
-            <div className="main-content">
+            <div className="app-shell">
                 <Sidebar socket={socket} onlineUsers={onlineUsers} />
-                {selectedChat && <ChatArea socket={socket} />}
+                <section className="chat-shell">
+                    {selectedChat ? (
+                        <ChatArea socket={socket} />
+                    ) : (
+                        <div className="empty-chat-state">
+                            <div className="empty-chat-state__icon">
+                                <i
+                                    className="fa fa-comments"
+                                    aria-hidden="true"
+                                ></i>
+                            </div>
+                            <h2>Select a chat</h2>
+                            <p>
+                                Choose a conversation from the sidebar to start
+                                messaging.
+                            </p>
+                        </div>
+                    )}
+                </section>
             </div>
         </div>
     );

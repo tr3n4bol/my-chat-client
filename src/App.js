@@ -11,11 +11,13 @@ import { useSelector } from "react-redux";
 function App() {
     const { loader } = useSelector((state) => state.loaderReducer);
     return (
-        <div>
+        <>
             <Toaster position="top-center" reverseOrder={false}></Toaster>
             {loader && <Loader />}
             <BrowserRouter>
                 <Routes>
+                    <Route path="/login" element={<Login />}></Route>
+                    <Route path="/signup" element={<SignUp />}></Route>
                     <Route
                         path="/"
                         element={
@@ -26,17 +28,15 @@ function App() {
                     ></Route>
                     <Route
                         path="/profile"
-                        element={ 
+                        element={
                             <ProtectedRoute>
                                 <Profile />
                             </ProtectedRoute>
                         }
                     ></Route>
-                    <Route path="/login" element={<Login />}></Route>
-                    <Route path="/signup" element={<SignUp />}></Route>
                 </Routes>
             </BrowserRouter>
-        </div>
+        </>
     );
 }
 

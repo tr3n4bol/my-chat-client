@@ -213,7 +213,14 @@ function ChatArea({ socket }) {
                             <i>{isTyping && "typing..."}</i>
                         </div>
                     </div>
-                    <div className="send-message-div">
+                    <form
+                        className="send-message_form"
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            if (!message.trim()) return;
+                            sendMessage();
+                        }}
+                    >
                         {/* TODO черновик при переходе между чатами */}
                         <input
                             type="text"
@@ -230,13 +237,14 @@ function ChatArea({ socket }) {
                                     sender: user._id,
                                 });
                             }}
+                            onSubmit={sendMessage}
                         ></input>
                         <button
+                            type="submit"
                             className="fa fa-paper-plane send-message-btn"
                             aria-hidden="true"
-                            onClick={sendMessage}
                         ></button>
-                    </div>
+                    </form>
                 </div>
             )}
         </>
