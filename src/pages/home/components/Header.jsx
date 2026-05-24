@@ -41,8 +41,8 @@ function Header({ socket }) {
                     ></div>
                 )}
                 <div className="logged-user-name">{getFullName()}</div>
-                <button className="logout-button">
-                    <i className="fa fa-power-off" onClick={logout}></i>
+                <button className="logout-button" onClick={logout}>
+                    <i className="fa fa-power-off"></i>
                 </button>
             </div>
         </div>
