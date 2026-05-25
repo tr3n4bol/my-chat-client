@@ -1,3 +1,4 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
 :root {
     --page-bg: #f4f7fb;
     --panel-bg: #ffffff;
@@ -272,14 +273,15 @@ img {
 }
 
 .logout-button {
-    width: 40px;
-    height: 40px;
-    border-radius: var(--radius-full);
-    background: #fee2e2;
-    color: var(--danger);
-    transition:
-        background var(--transition),
-        transform var(--transition);
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 14px;
+  background: #fff1f2;
+  color: var(--danger);
+  font-size: 16px;
+  cursor: pointer;
+  transition: background var(--transition), transform var(--transition);
 }
 
 .logout-button:hover {
