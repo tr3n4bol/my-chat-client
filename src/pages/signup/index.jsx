@@ -37,58 +37,65 @@ function SignUp() {
     }
 
     return (
-        <main className="container">
-            <div className="container-back-img"></div>
-            <div className="container-back-color"></div>
-            <div className="card">
-                <div className="card_title">
+        <div className="auth-page">
+            <div className="auth-bg"></div>
+            <main className="auth-card">
+                <header className="auth-card__header">
                     <h1>Create Account</h1>
-                </div>
-                <div className="form">
-                    <form onSubmit={onFormSubmit}>
-                        <input
-                            type="text"
-                            placeholder="First Name"
-                            value={user.firstName}
-                            onChange={(e) => {
-                                setUser({ ...user, firstName: e.target.value });
-                            }}
-                        />
-                        <input
-                            type="text"
-                            placeholder="Last Name"
-                            value={user.lastName}
-                            onChange={(e) => {
-                                setUser({ ...user, lastName: e.target.value });
-                            }}
-                        />
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            value={user.email}
-                            onChange={(e) => {
-                                setUser({ ...user, email: e.target.value });
-                            }}
-                        />
-                        <input
-                            type="password"
-                            placeholder="Password"
-                            value={user.password}
-                            onChange={(e) => {
-                                setUser({ ...user, password: e.target.value });
-                            }}
-                        />
-                        <button>Sign Up</button>
-                    </form>
-                </div>
-                <div className="card_terms">
+                </header>
+                <form
+                    className="auth-form"
+                    onSubmit={onFormSubmit}
+                    name="signup"
+                >
+                    <input
+                        type="text"
+                        placeholder="First Name"
+                        name="signup-first_name"
+                        value={user.firstName}
+                        onChange={(e) => {
+                            setUser({ ...user, firstName: e.target.value });
+                        }}
+                    />
+                    <input
+                        type="text"
+                        placeholder="Last Name"
+                        name="signup-last_name"
+                        value={user.lastName}
+                        onChange={(e) => {
+                            setUser({ ...user, lastName: e.target.value });
+                        }}
+                    />
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        name="signup-email"
+                        value={user.email}
+                        onChange={(e) => {
+                            setUser({ ...user, email: e.target.value });
+                        }}
+                    />
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        name="signup-password"
+                        value={user.password}
+                        onChange={(e) => {
+                            setUser({ ...user, password: e.target.value });
+                        }}
+                    />
+                    <button className="btn btn-primary" type="submit">
+                        Sign Up
+                    </button>
+                </form>
+                <footer className="auth-card__footer">
                     <span>
                         Already have an account?
                         <Link to="/login">Login Here</Link>
                     </span>
-                </div>
-            </div>
-        </main>
+                </footer>
+            </main>
+        </div>
     );
 }
 
