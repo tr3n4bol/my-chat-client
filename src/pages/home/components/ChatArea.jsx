@@ -141,6 +141,8 @@ function ChatArea({ socket }) {
                 }
             });
 
+
+        // refactor
         socket.off("started-typing").on("started-typing", (data) => {
             const selectedChat = store.getState().userReducer.selectedChat;
 
