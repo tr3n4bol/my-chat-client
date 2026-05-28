@@ -178,29 +178,30 @@ function UsersList({ searchKey, socket, onlineUsers }) {
                     }
                 >
                     <div className="filter-user-display">
-                        {user.profilePicture ? (
-                            <img
-                                src={user.profilePicture}
-                                alt="Profile"
-                                className="user-profile-image"
-                            ></img>
-                        ) : (
-                            <div
-                                className={
-                                    isSelectedChat(user)
-                                        ? "user-selected-avatar"
-                                        : "user-default-avatar"
-                                }
-                                style={
-                                    onlineUsers.includes(user._id)
-                                        ? { border: "#31e152 3px solid" }
-                                        : null
-                                }
-                            >
-                                {user.firstName.charAt(0) +
-                                    user.lastName.charAt(0) || ""}
-                            </div>
-                        )}
+                        <div className="user-avatar-wrapper">
+                            {user.profilePicture ? (
+                                <img
+                                    src={user.profilePicture}
+                                    alt="Profile"
+                                    className="user-profile-image"
+                                />
+                            ) : (
+                                <div
+                                    className={
+                                        isSelectedChat(user)
+                                            ? "user-selected-avatar"
+                                            : "user-default-avatar"
+                                    }
+                                >
+                                    {(user.firstName?.charAt(0) || "") +
+                                        (user.lastName?.charAt(0) || "")}
+                                </div>
+                            )}
+
+                            {onlineUsers?.includes(user._id) && (
+                                <span className="user-online-indicator"></span>
+                            )}
+                        </div>
 
                         <div className="filter-user-details">
                             <div className="user-display-name">

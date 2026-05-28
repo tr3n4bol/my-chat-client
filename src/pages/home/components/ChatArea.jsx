@@ -141,8 +141,6 @@ function ChatArea({ socket }) {
                 }
             });
 
-
-        // refactor
         socket.off("started-typing").on("started-typing", (data) => {
             const selectedChat = store.getState().userReducer.selectedChat;
 
@@ -203,7 +201,7 @@ function ChatArea({ socket }) {
                                                 <i
                                                     className="fa fa-check-circle"
                                                     aria-hidden="true"
-                                                    style={{ color: "#f73210" }}
+                                                    style={{ color: "#027da2" }}
                                                 ></i>
                                             )}
                                         </div>
